@@ -3,6 +3,10 @@
 //const limit = 10;
 //const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
 
+function convertPokemonToLi(pokemonTypes){
+    return pokemonTypes.map((typeSlot) => `<li class="type">${typeSlot.type.name}</li>`)
+}
+
 function convertPokemonToHtml(pokemon) {
     return `
         <li class="pokemon">
@@ -10,10 +14,9 @@ function convertPokemonToHtml(pokemon) {
             <span class="name">${pokemon.name}</span>
             <div class="details">
                 <ol class="types">
-                    <li class="type">grass</li>
-                    <li class="type">poison</li>
+                    ${convertPokemonToLi(pokemon.types).join('')}
                 </ol>
-                <img src="/imagens/bulbasaur.jpg" alt="${pokemon.name}" />
+                <img src="${pokemon.sprites.other.dream_world.front_default}" alt="${pokemon.name}" />
             </div></>
         </li>`
     
