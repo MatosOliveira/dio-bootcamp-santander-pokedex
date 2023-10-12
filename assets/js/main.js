@@ -1,8 +1,9 @@
 
-//const offset = 0;
-//const limit = 10;
-//const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
-
+const pokemonList = document.getElementById('pokemonList')
+const loadMoreButton = document.getElementById('loadMoreButton')
+const limit = 10;
+let offset = 0;
+const maxRecords = 151;
 
 function convertPokemonToHtml(pokemon) {
     return `
@@ -19,8 +20,27 @@ function convertPokemonToHtml(pokemon) {
     
 }
 
-const pokemonList = document.getElementById('pokemonList')
+function loadPokemonItems(offset, limit) {
+    pokeApi.getPokemons(offset, limit).then((pokemons = []) => {
+        pokemonList.innerHTML += pokemons.map(convertPokemonToHtml).join('')
+    })
+}
 
-pokeApi.getPokemons().then((pokemons = []) => {
-    pokemonList.innerHTML += pokemons.map(convertPokemonToHtml).join('')
+loadPokemonItems(offset, limit)
+
+loadMoreButton.addEventListener('click', () => {
+    offset += limit
+
+    const qtdeRecordsNextPage = offset + limit;
+
+    if(qtdeRecordsNextPage >= maxRecords) {
+        const newLimit = qtdeRecordsNextPage - maxRecords
+        loadPokemonItems(offset, limit)
+        loadMoreButton.parentElement.removeChild(loadMoreButton)
+
+    } else {
+        loadPokemonItems(offset, limit)
+    }
+    
 })
+
